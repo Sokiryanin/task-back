@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "title": "ToDo",
+    "tasks": [
+      {
+        "taskId": "1",
+        "taskTitle": "Task 1",
+        "description": "Description of Task 1",
+        "deadline": "2024-04-15",
+        "priority": "High",
+        "boardId": "1"
+      },
+      {
+        "taskId": "2",
+        "taskTitle": "Task 2",
+        "description": "Description of Task 2",
+        "deadline": "2024-04-15",
+        "priority": "Low",
+        "boardId": "1"
+      }
+    ]
+  },
+  {
+    "id": "HHlzL9_lQjpsXsaEQeY49",
+    "title": "In progress",
+    "tasks": [
+      {
+        "boardId": "HHlzL9_lQjpsXsaEQeY49",
+        "taskId": "6fEu7sYUtiLct2mQb-XDu",
+        "taskTitle": "My new task",
+        "description": "Just do it",
+        "deadline": "2024-04-15",
+        "priority": "High"
+      }
+    ]
+  }
+]
