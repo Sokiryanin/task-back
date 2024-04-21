@@ -1,77 +1,107 @@
-import * as boardService from "./boards/index.js";
+import express from "express";
+import logger from "morgan";
+import cors from "cors";
 
-const invokeAction = async ({
-  action,
-  id,
-  title,
-  tasks,
-  boardId,
-  taskId,
-  taskTitle,
-  description,
-  deadline,
-  priority,
-}) => {
-  switch (action) {
-    case "list":
-      const allBoards = await boardService.getAllBoards();
-      return console.log(allBoards);
-    //   return console.log(JSON.stringify(allBoards, null, 2));
+import boardsRouter from "./routes/api/boards-router.js";
 
-    case "getById":
-      const oneBoard = await boardService.getBoardById(id);
-      return console.log(oneBoard);
+const app = express();
 
-    case "add":
-      const newBoard = await boardService.addBoard({ title, tasks });
-      return console.log(newBoard);
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-    case "updateById":
-      const updateBoard = await boardService.updateBoardById(id, {
-        title,
-        tasks,
-      });
+app.use(logger(formatsLogger));
+app.use(cors());
+// app.use(express.json());
 
-    case "deleteBoard":
-      const deletedBoard = await boardService.deleteBoardById(id);
-      return console.log(deletedBoard);
+app.use("/api/boards", boardsRouter);
 
-    case "addTask":
-      const newTask = await boardService.addTaskToBoard({
-        boardId,
-        taskId,
-        taskTitle,
-        description,
-        deadline,
-        priority,
-      });
-      return console.log(newTask);
+app.use((_, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
-    case "deleteTask":
-      const deletedTask = await boardService.deleteTaskFromBoard({
-        boardId,
-        taskId,
-      });
-      return console.log(deletedTask);
+app.use((err, req, res, next) => {
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
+});
 
-    case "updateTask":
-      const updatedTask = await boardService.updateTaskInBoard(
-        boardId,
-        taskId,
-        {
-          taskTitle,
-          description,
-          deadline,
-          priority,
-        }
-      );
+export default app;
 
-      return console.log(updatedTask);
+/* ====================================================================== */
+// import * as boardService from "./boards/index.js";
 
-    default:
-      console.log("Unknow action");
-  }
-};
+// const invokeAction = async ({
+//   action,
+//   id,
+//   title,
+//   tasks,
+//   boardId,
+//   taskId,
+//   taskTitle,
+//   description,
+//   deadline,
+//   priority,
+// }) => {
+//   switch (action) {
+//     case "list":
+//       const allBoards = await boardService.getAllBoards();
+//       return console.log(allBoards);
+//     //   return console.log(JSON.stringify(allBoards, null, 2));
+
+//     case "getById":
+//       const oneBoard = await boardService.getBoardById(id);
+//       return console.log(oneBoard);
+
+//     case "add":
+//       const newBoard = await boardService.addBoard({ title, tasks });
+//       return console.log(newBoard);
+
+//     case "updateById":
+//       const updateBoard = await boardService.updateBoardById(id, {
+//         title,
+//         tasks,
+//       });
+
+//     case "deleteBoard":
+//       const deletedBoard = await boardService.deleteBoardById(id);
+//       return console.log(deletedBoard);
+
+//     case "addTask":
+//       const newTask = await boardService.addTaskToBoard({
+//         boardId,
+//         taskId,
+//         taskTitle,
+//         description,
+//         deadline,
+//         priority,
+//       });
+//       return console.log(newTask);
+
+//     case "deleteTask":
+//       const deletedTask = await boardService.deleteTaskFromBoard({
+//         boardId,
+//         taskId,
+//       });
+//       return console.log(deletedTask);
+
+//     case "updateTask":
+//       const updatedTask = await boardService.updateTaskInBoard(
+//         boardId,
+//         taskId,
+//         {
+//           taskTitle,
+//           description,
+//           deadline,
+//           priority,
+//         }
+//       );
+
+//       return console.log(updatedTask);
+
+//     default:
+//       console.log("Unknow action");
+//   }
+// };
+
+/* виклик функції для перевірки кейсів */
 
 // invokeAction({
 //   action: "deleteTask",
@@ -105,11 +135,11 @@ const invokeAction = async ({
 //   priority: "High",
 // });
 
-invokeAction({
-  action: "deleteTask",
-  boardId: "HHlzL9_lQjpsXsaEQeY49",
-  taskId: "G3W4nZvQLKnXE0mzbET-I",
-});
+// invokeAction({
+//   action: "deleteTask",
+//   boardId: "HHlzL9_lQjpsXsaEQeY49",
+//   taskId: "G3W4nZvQLKnXE0mzbET-I",
+// });
 
 // invokeAction({
 //     action: "updateTask",

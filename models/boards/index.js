@@ -4,13 +4,14 @@ import path from "path";
 /* */
 
 /* отримаємо абсолютний шлях до boards.json */
-const boardsPath = path.resolve("boards", "boards.json");
+const boardsPath = path.resolve("models", "boards", "boards.json");
 
+/* Функція що перезаписує JSON */
 const updateBoards = (boards) =>
   fs.writeFile(boardsPath, JSON.stringify(boards, null, 2));
 
 /* Boards functions */
-export const getAllBoards = async () => {
+const getAllBoards = async () => {
   /* считываем все доски, 
   указываем абсолютный адрес файла при помощи path
   */
@@ -19,7 +20,7 @@ export const getAllBoards = async () => {
   return JSON.parse(result);
 };
 
-export const getBoardById = async (id) => {
+const getBoardById = async (id) => {
   const boards = await getAllBoards();
   const result = boards.find((item) => item.id === id);
 
@@ -29,7 +30,7 @@ export const getBoardById = async (id) => {
   return result || null;
 };
 
-export const addBoard = async ({ title, tasks }) => {
+const addBoard = async ({ title, tasks }) => {
   const boards = await getAllBoards();
   const newBoard = {
     id: nanoid(),
@@ -46,7 +47,7 @@ export const addBoard = async ({ title, tasks }) => {
   return newBoard;
 };
 
-export const deleteBoardById = async (id) => {
+const deleteBoardById = async (id) => {
   const boards = await getAllBoards();
 
   const index = boards.findIndex((item) => item.id === id);
@@ -60,7 +61,7 @@ export const deleteBoardById = async (id) => {
   return result;
 };
 
-export const updateBoardById = async (id, data) => {
+const updateBoardById = async (id, data) => {
   const boards = await getAllBoards();
   const index = boards.findIndex((item) => item.id === id);
 
@@ -74,7 +75,7 @@ export const updateBoardById = async (id, data) => {
 
 /* Tasks functions */
 
-export const addTaskToBoard = async ({
+const addTaskToBoard = async ({
   boardId,
   taskTitle,
   description,
@@ -102,7 +103,7 @@ export const addTaskToBoard = async ({
   return boards[index];
 };
 
-export const deleteTaskFromBoard = async ({ boardId, taskId }) => {
+const deleteTaskFromBoard = async ({ boardId, taskId }) => {
   const boards = await getAllBoards();
 
   const index = boards.findIndex((board) => board.id === boardId);
@@ -124,7 +125,7 @@ export const deleteTaskFromBoard = async ({ boardId, taskId }) => {
   return deletedTask;
 };
 
-export const updateTaskInBoard = async (boardId, taskId, newData) => {
+const updateTaskInBoard = async (boardId, taskId, newData) => {
   const boards = await getAllBoards();
   const boardIndex = boards.findIndex((board) => board.id === boardId);
 
@@ -149,4 +150,15 @@ export const updateTaskInBoard = async (boardId, taskId, newData) => {
   };
   await updateBoards(boards);
   return boards[boardIndex];
+};
+
+export default {
+  getAllBoards,
+  getBoardById,
+  addBoard,
+  deleteBoardById,
+  updateBoardById,
+  addTaskToBoard,
+  deleteTaskFromBoard,
+  updateTaskInBoard,
 };
