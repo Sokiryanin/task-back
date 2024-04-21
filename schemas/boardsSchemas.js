@@ -1,5 +1,8 @@
 import Joi from "joi";
 
-export const createContactSchema = Joi.object({});
-
-export const updateContactSchema = Joi.object({});
+export const boardAddSchema = Joi.object({
+  title: Joi.string().required().messages({
+    "any.required": `"title"  must be exist`,
+  }),
+  tasks: Joi.array().required(),
+});

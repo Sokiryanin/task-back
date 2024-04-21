@@ -1,5 +1,6 @@
 import { HttpError } from "../helpers/index.js";
 import boardService from "../models/boards/index.js";
+import { boardAddSchema } from "../schemas/boardsSchemas.js";
 
 /* Boards */
 
@@ -29,8 +30,24 @@ const getById = async (req, res, next) => {
   }
 };
 
+const createBoard = async (req, res, next) => {
+  try {
+    /* нам потрібно передати тіло запиту, воно знаходитсья в req.body
+console.log(req.body); */
+
+    // Диструктуризуємо error
+    const { error } = boardAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await boardService.addBoard(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // export const deleteBoard = (req, res) => {};
-// export const createBoard = (req, res) => {};
 // export const updateBoard = (req, res) => {};
 
 /* Tasks */
@@ -38,4 +55,5 @@ const getById = async (req, res, next) => {
 export default {
   getAllBoards,
   getById,
+  createBoard,
 };
