@@ -103,24 +103,22 @@ const addTaskToBoard = async ({
   return boards[index];
 };
 
-const deleteTaskFromBoard = async ({ boardId, taskId }) => {
+const deleteTaskFromBoard = async (taskId) => {
   const boards = await getAllBoards();
 
-  const index = boards.findIndex((board) => board.id === boardId);
+  const boardWithTask = boards.find((board) => {
+    const taskIndex = board.tasks.findIndex((task) => task.taskId === taskId);
+    return taskIndex !== -1;
+  });
 
-  if (index === -1) {
-    return null; // Если доска с указанным id не найдена
-  }
-
-  const taskIndex = boards[index].tasks.findIndex(
-    (task) => task.taskId === taskId
-  );
-
-  if (taskIndex === -1) {
+  if (!boardWithTask) {
     return null; // Если задача с указанным taskId не найдена в доске
   }
 
-  const deletedTask = boards[index].tasks.splice(taskIndex, 1)[0]; // Удаление задачи из массива задач
+  const taskIndex = boardWithTask.tasks.findIndex(
+    (task) => task.taskId === taskId
+  );
+  const deletedTask = boardWithTask.tasks.splice(taskIndex, 1)[0];
   await updateBoards(boards);
   return deletedTask;
 };

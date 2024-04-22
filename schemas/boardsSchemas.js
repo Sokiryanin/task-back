@@ -11,3 +11,20 @@ export const boardUpdateSchema = Joi.object({
   title: Joi.string(),
   tasks: Joi.array(),
 });
+
+export const boardAddTaskSchema = Joi.object({
+  boardId: Joi.string(),
+  taskTitle: Joi.string(),
+  description: Joi.string(),
+  deadline: Joi.date(),
+  priority: Joi.string(),
+});
+
+export const boardUpdateTaskSchema = Joi.object({
+  boardId: Joi.string(),
+  taskId: Joi.string(),
+  taskTitle: Joi.string(),
+  description: Joi.string(),
+  deadline: Joi.date(),
+  priority: Joi.string(),
+});

@@ -1,6 +1,11 @@
 import { HttpError } from "../helpers/index.js";
 import boardService from "../models/boards/index.js";
-import { boardAddSchema, boardUpdateSchema } from "../schemas/boardsSchemas.js";
+import {
+  boardAddSchema,
+  boardAddTaskSchema,
+  boardUpdateSchema,
+  boardUpdateTaskSchema,
+} from "../schemas/boardsSchemas.js";
 
 /* Boards */
 
@@ -37,6 +42,7 @@ console.log(req.body); */
 
     // Диструктуризуємо error
     const { error } = boardAddSchema.validate(req.body);
+
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -89,9 +95,53 @@ const deleteByIdBoard = async (req, res, next) => {
 
 const createNewTask = async (req, res, next) => {
   try {
-    console.log(req.params);
+    const { error } = boardAddTaskSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+
+    const result = await boardService.addTaskToBoard(req.body);
+    res.status(201).json(result);
   } catch (error) {
-    next();
+    next(error);
+  }
+};
+
+const updateTaskById = async (req, res, next) => {
+  try {
+    const { error } = boardUpdateTaskSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { id, taskId } = req.params;
+    const result = await boardService.updateTaskInBoard(id, taskId, req.body);
+    if (!result) {
+      throw HttpError(
+        404,
+        `Task with id=${taskId} in board with id=${id} not found`
+      );
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteTaskById = async (req, res, next) => {
+  try {
+    const { taskId } = req.params;
+    const result = await boardService.deleteTaskFromBoard(taskId); // Передаем taskId напрямую
+    console.log(result);
+
+    if (!result) {
+      throw HttpError(
+        404,
+        `Task with id=${taskId} in board with id=${id} not found`
+      );
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -102,4 +152,6 @@ export default {
   updateByIdBoard,
   deleteByIdBoard,
   createNewTask,
+  updateTaskById,
+  deleteTaskById,
 };

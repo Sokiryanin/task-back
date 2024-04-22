@@ -23,7 +23,7 @@
   },
   {
     "id": "2",
-    "title": "Update In progress",
+    "title": "Update again In progress",
     "tasks": [
       {
         "boardId": "2",
@@ -38,6 +38,23 @@
   {
     "id": "4uFwOVRRo9SUoALFUg5J9",
     "title": "In Postman",
-    "tasks": []
+    "tasks": [
+      {
+        "boardId": "4uFwOVRRo9SUoALFUg5J9",
+        "taskId": "nh6za21CRCCFn4YGdjkgb",
+        "taskTitle": "My new task in Postman",
+        "description": "Just do it",
+        "deadline": "2024-04-15",
+        "priority": "High"
+      },
+      {
+        "boardId": "4uFwOVRRo9SUoALFUg5J9",
+        "taskId": "xTYYNkXoU5pVfF1CRGGJL",
+        "taskTitle": "One more tasks in Postman",
+        "description": "Second part",
+        "deadline": "2024-04-19",
+        "priority": "Low"
+      }
+    ]
   }
 ]
