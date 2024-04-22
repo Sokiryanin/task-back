@@ -22,13 +22,13 @@
     ]
   },
   {
-    "id": "HHlzL9_lQjpsXsaEQeY49",
-    "title": "In progress",
+    "id": "2",
+    "title": "Update In progress",
     "tasks": [
       {
-        "boardId": "HHlzL9_lQjpsXsaEQeY49",
+        "boardId": "2",
         "taskId": "6fEu7sYUtiLct2mQb-XDu",
-        "taskTitle": "My new task",
+        "taskTitle": "My new task in Postman",
         "description": "Just do it",
         "deadline": "2024-04-15",
         "priority": "High"
@@ -38,11 +38,6 @@
   {
     "id": "4uFwOVRRo9SUoALFUg5J9",
     "title": "In Postman",
-    "tasks": []
-  },
-  {
-    "id": "H52GEOMoa0JR4luCOSed2",
-    "title": "Create board in Postman",
     "tasks": []
   }
 ]

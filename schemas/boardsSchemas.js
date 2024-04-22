@@ -6,3 +6,8 @@ export const boardAddSchema = Joi.object({
   }),
   tasks: Joi.array().required(),
 });
+
+export const boardUpdateSchema = Joi.object({
+  title: Joi.string(),
+  tasks: Joi.array(),
+});

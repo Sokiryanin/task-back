@@ -6,16 +6,17 @@ import { isEmptyBody } from "../../middlewares/index.js";
 
 const boardsRouter = express.Router();
 
-boardsRouter.get("/", boardsController.getAllBoards);
+boardsRouter.get("/", boardsController.getBoards);
 
-boardsRouter.get("/:id", boardsController.getById);
+boardsRouter.get("/:id", boardsController.getBoardById);
 
 boardsRouter.post("/", isEmptyBody, boardsController.createBoard);
 
-// boardsRouter.delete("/:id", boardsService.deleteBoardById);
+boardsRouter.put("/:id", isEmptyBody, boardsController.updateByIdBoard);
 
-// boardsRouter.post("/", boardsService.addBoard);
+boardsRouter.delete("/:id", boardsController.deleteByIdBoard);
 
-// boardsRouter.put("/:id", boardsService.updateBoardById);
+
+
 
 export default boardsRouter;

@@ -68,7 +68,7 @@ const updateBoardById = async (id, data) => {
   if (index === -1) {
     return null;
   }
-  boards[index] = { id, ...data };
+  boards[index] = { ...boards[index], ...data };
   await updateBoards(boards);
   return boards[index];
 };
