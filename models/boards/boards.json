@@ -23,7 +23,7 @@
   },
   {
     "id": "2",
-    "title": "Update again In progress",
+    "title": "In progress",
     "tasks": [
       {
         "boardId": "2",
@@ -54,6 +54,14 @@
         "description": "Second part",
         "deadline": "2024-04-19",
         "priority": "Low"
+      },
+      {
+        "boardId": "4uFwOVRRo9SUoALFUg5J9",
+        "taskId": "2XtjfG6pv8JPKTsX2S87O",
+        "taskTitle": "Update test tasks",
+        "description": "Five task",
+        "deadline": "2024-04-19",
+        "priority": "High"
       }
     ]
   }
