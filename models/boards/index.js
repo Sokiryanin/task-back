@@ -1,162 +1,164 @@
-import fs from "fs/promises";
-import { nanoid } from "nanoid";
-import path from "path";
-/* */
+/* Код для роботи з базою в JSON */
 
-/* отримаємо абсолютний шлях до boards.json */
-const boardsPath = path.resolve("models", "boards", "boards.json");
+// import fs from "fs/promises";
+// import { nanoid } from "nanoid";
+// import path from "path";
+// /* */
 
-/* Функція що перезаписує JSON */
-const updateBoards = (boards) =>
-  fs.writeFile(boardsPath, JSON.stringify(boards, null, 2));
+// /* отримаємо абсолютний шлях до boards.json */
+// const boardsPath = path.resolve("models", "boards", "boards.json");
 
-/* Boards functions */
-const getAllBoards = async () => {
-  /* считываем все доски, 
-  указываем абсолютный адрес файла при помощи path
-  */
-  const result = await fs.readFile(boardsPath, "utf-8");
-  /* перетворюємо на обʼєкт */
-  return JSON.parse(result);
-};
+// /* Функція що перезаписує JSON */
+// const updateBoards = (boards) =>
+//   fs.writeFile(boardsPath, JSON.stringify(boards, null, 2));
 
-const getBoardById = async (id) => {
-  const boards = await getAllBoards();
-  const result = boards.find((item) => item.id === id);
+// /* Boards functions */
+// const getAllBoards = async () => {
+//   /* считываем все доски,
+//   указываем абсолютный адрес файла при помощи path
+//   */
+//   const result = await fs.readFile(boardsPath, "utf-8");
+//   /* перетворюємо на обʼєкт */
+//   return JSON.parse(result);
+// };
 
-  /* если в базе данных нет елемента с указаным id то она в
-  возвращает null
-  */
-  return result || null;
-};
+// const getBoardById = async (id) => {
+//   const boards = await getAllBoards();
+//   const result = boards.find((item) => item.id === id);
 
-const addBoard = async ({ title, tasks }) => {
-  const boards = await getAllBoards();
-  const newBoard = {
-    id: nanoid(),
-    title,
-    tasks,
-  };
+//   /* если в базе данных нет елемента с указаным id то она в
+//   возвращает null
+//   */
+//   return result || null;
+// };
 
-  boards.push(newBoard);
-  /* что бы после записи новой доски оставались пробелы,
- то вторым аргументом передается null а третьим 
- аргументом передается 2
- */
-  await updateBoards(boards);
-  return newBoard;
-};
+// const addBoard = async ({ title, tasks }) => {
+//   const boards = await getAllBoards();
+//   const newBoard = {
+//     id: nanoid(),
+//     title,
+//     tasks,
+//   };
 
-const deleteBoardById = async (id) => {
-  const boards = await getAllBoards();
+//   boards.push(newBoard);
+//   /* что бы после записи новой доски оставались пробелы,
+//  то вторым аргументом передается null а третьим
+//  аргументом передается 2
+//  */
+//   await updateBoards(boards);
+//   return newBoard;
+// };
 
-  const index = boards.findIndex((item) => item.id === id);
-  if (index === -1) {
-    return null;
-  }
+// const deleteBoardById = async (id) => {
+//   const boards = await getAllBoards();
 
-  /* splice повертає видалений обʼєкт */
-  const [result] = boards.splice(index, 1);
-  await updateBoards(boards);
-  return result;
-};
+//   const index = boards.findIndex((item) => item.id === id);
+//   if (index === -1) {
+//     return null;
+//   }
 
-const updateBoardById = async (id, data) => {
-  const boards = await getAllBoards();
-  const index = boards.findIndex((item) => item.id === id);
+//   /* splice повертає видалений обʼєкт */
+//   const [result] = boards.splice(index, 1);
+//   await updateBoards(boards);
+//   return result;
+// };
 
-  if (index === -1) {
-    return null;
-  }
-  boards[index] = { ...boards[index], ...data };
-  await updateBoards(boards);
-  return boards[index];
-};
+// const updateBoardById = async (id, data) => {
+//   const boards = await getAllBoards();
+//   const index = boards.findIndex((item) => item.id === id);
 
-/* Tasks functions */
+//   if (index === -1) {
+//     return null;
+//   }
+//   boards[index] = { ...boards[index], ...data };
+//   await updateBoards(boards);
+//   return boards[index];
+// };
 
-const addTaskToBoard = async ({
-  boardId,
-  taskTitle,
-  description,
-  deadline,
-  priority,
-}) => {
-  const boards = await getAllBoards();
-  const newTask = {
-    boardId,
-    taskId: nanoid(),
-    taskTitle,
-    description,
-    deadline,
-    priority,
-  };
+// /* Tasks functions */
 
-  const index = boards.findIndex((board) => board.id === boardId);
+// const addTaskToBoard = async ({
+//   boardId,
+//   taskTitle,
+//   description,
+//   deadline,
+//   priority,
+// }) => {
+//   const boards = await getAllBoards();
+//   const newTask = {
+//     boardId,
+//     taskId: nanoid(),
+//     taskTitle,
+//     description,
+//     deadline,
+//     priority,
+//   };
 
-  if (index === -1) {
-    return null; // Если доска с указанным id не найдена
-  }
+//   const index = boards.findIndex((board) => board.id === boardId);
 
-  boards[index].tasks.push(newTask);
-  await updateBoards(boards);
-  return boards[index];
-};
+//   if (index === -1) {
+//     return null; // Если доска с указанным id не найдена
+//   }
 
-const deleteTaskFromBoard = async (taskId) => {
-  const boards = await getAllBoards();
+//   boards[index].tasks.push(newTask);
+//   await updateBoards(boards);
+//   return boards[index];
+// };
 
-  const boardWithTask = boards.find((board) => {
-    const taskIndex = board.tasks.findIndex((task) => task.taskId === taskId);
-    return taskIndex !== -1;
-  });
+// const deleteTaskFromBoard = async (taskId) => {
+//   const boards = await getAllBoards();
 
-  if (!boardWithTask) {
-    return null; // Если задача с указанным taskId не найдена в доске
-  }
+//   const boardWithTask = boards.find((board) => {
+//     const taskIndex = board.tasks.findIndex((task) => task.taskId === taskId);
+//     return taskIndex !== -1;
+//   });
 
-  const taskIndex = boardWithTask.tasks.findIndex(
-    (task) => task.taskId === taskId
-  );
-  const deletedTask = boardWithTask.tasks.splice(taskIndex, 1)[0];
-  await updateBoards(boards);
-  return deletedTask;
-};
+//   if (!boardWithTask) {
+//     return null; // Если задача с указанным taskId не найдена в доске
+//   }
 
-const updateTaskInBoard = async (boardId, taskId, newData) => {
-  const boards = await getAllBoards();
-  const boardIndex = boards.findIndex((board) => board.id === boardId);
+//   const taskIndex = boardWithTask.tasks.findIndex(
+//     (task) => task.taskId === taskId
+//   );
+//   const deletedTask = boardWithTask.tasks.splice(taskIndex, 1)[0];
+//   await updateBoards(boards);
+//   return deletedTask;
+// };
 
-  if (boardIndex === -1) {
-    return null; // Если доска с указанным id не найдена
-  }
+// const updateTaskInBoard = async (boardId, taskId, newData) => {
+//   const boards = await getAllBoards();
+//   const boardIndex = boards.findIndex((board) => board.id === boardId);
 
-  const taskIndex = boards[boardIndex].tasks.findIndex(
-    (task) => task.taskId === taskId
-  );
+//   if (boardIndex === -1) {
+//     return null; // Если доска с указанным id не найдена
+//   }
 
-  if (taskIndex === -1) {
-    return null; // Если задача с указанным taskId не найдена в доске
-  }
+//   const taskIndex = boards[boardIndex].tasks.findIndex(
+//     (task) => task.taskId === taskId
+//   );
 
-  /* При обновлении любого аргумента в задаче, 
-  перезапишется только измененный аргумент */
+//   if (taskIndex === -1) {
+//     return null; // Если задача с указанным taskId не найдена в доске
+//   }
 
-  boards[boardIndex].tasks[taskIndex] = {
-    ...boards[boardIndex].tasks[taskIndex],
-    ...newData,
-  };
-  await updateBoards(boards);
-  return boards[boardIndex];
-};
+//   /* При обновлении любого аргумента в задаче,
+//   перезапишется только измененный аргумент */
 
-export default {
-  getAllBoards,
-  getBoardById,
-  addBoard,
-  deleteBoardById,
-  updateBoardById,
-  addTaskToBoard,
-  deleteTaskFromBoard,
-  updateTaskInBoard,
-};
+//   boards[boardIndex].tasks[taskIndex] = {
+//     ...boards[boardIndex].tasks[taskIndex],
+//     ...newData,
+//   };
+//   await updateBoards(boards);
+//   return boards[boardIndex];
+// };
+
+// export default {
+//   getAllBoards,
+//   getBoardById,
+//   addBoard,
+//   deleteBoardById,
+//   updateBoardById,
+//   addTaskToBoard,
+//   deleteTaskFromBoard,
+//   updateTaskInBoard,
+// };
