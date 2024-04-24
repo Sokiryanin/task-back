@@ -10,7 +10,12 @@ const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // Разрешает запросы из всех источников
+    methods: ["GET", "POST", "PUT", "DELETE"], // Разрешает определенные методы запросов
+  })
+);
 app.use(express.json());
 
 app.use("/api/boards", boardsRouter);
