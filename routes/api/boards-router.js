@@ -48,6 +48,7 @@ boardsRouter.put(
   validateBody(boardUpdateTaskSchema),
   boardsController.updateTaskById
 );
+
 boardsRouter.delete("/:id/tasks/:taskId", boardsController.deleteTaskById);
 
 export default boardsRouter;
