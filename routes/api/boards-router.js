@@ -1,38 +1,45 @@
 import express from "express";
 import boardsController from "../../controllers/boards-controller.js";
-import { isEmptyBody } from "../../middlewares/index.js";
-
-import {
-  boardAddSchema,
-  boardAddTaskSchema,
-  boardUpdateSchema,
-  boardUpdateTaskSchema,
-} from "../../schemas/boardsSchemas.js";
+import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 
 import { validateBody } from "../../decorators/index.js";
+import {
+  boardAddSchema,
+  boardTitleSchema,
+  boardUpdateSchema,
+} from "../../models/Board.js";
 
 const boardsRouter = express.Router();
 
 /* Boards */
 boardsRouter.get("/", boardsController.getBoards);
 
-// boardsRouter.get("/:id", boardsController.getBoardById);
+boardsRouter.get("/:id", isValidId, boardsController.getBoardById);
 
-// boardsRouter.post(
-//   "/",
-//   isEmptyBody,
-//   validateBody(boardAddSchema),
-//   boardsController.createBoard
-// );
+boardsRouter.post(
+  "/",
+  isEmptyBody,
+  validateBody(boardAddSchema),
+  boardsController.createBoard
+);
 
-// boardsRouter.put(
-//   "/:id",
-//   isEmptyBody,
-//   validateBody(boardUpdateSchema),
-//   boardsController.updateByIdBoard
-// );
+boardsRouter.put(
+  "/:id",
+  isValidId,
+  isEmptyBody,
+  validateBody(boardUpdateSchema),
+  boardsController.updateByIdBoard
+);
 
-// boardsRouter.delete("/:id", boardsController.deleteByIdBoard);
+boardsRouter.patch(
+  "/:id/title",
+  isValidId,
+  isEmptyBody,
+  validateBody(boardTitleSchema),
+  boardsController.updateByIdBoard
+);
+
+boardsRouter.delete("/:id", isValidId, boardsController.deleteByIdBoard);
 
 // /* Tasks */
 // boardsRouter.post(
