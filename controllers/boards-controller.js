@@ -46,7 +46,8 @@ const deleteByIdBoard = async (req, res) => {
   if (!result) {
     throw HttpError(404, `Board with id=${id} not found`);
   }
-  res.json(result);
+
+  // res.json(result);
   // res.status(204).send();
   res.json({
     message: "Delete success",
@@ -60,6 +61,21 @@ const deleteByIdBoard = async (req, res) => {
 //   res.status(201).json(result);
 // };
 
+const createNewTask = async (req, res) => {
+  const { id } = req.params;
+  const { taskTitle, description, deadline, priority, boardId } = req.body;
+
+  const result = await Board.findById(id);
+  if (!result) {
+    throw HttpError(404, `Board with id=${id} not found`);
+  }
+
+  result.tasks.push({ taskTitle, description, deadline, priority, boardId });
+  await result.save();
+
+  res.status(201).json(result);
+};
+
 // const updateTaskById = async (req, res) => {
 //   const { id, taskId } = req.params;
 //   const result = await boardService.updateTaskInBoard(id, taskId, req.body);
@@ -72,6 +88,37 @@ const deleteByIdBoard = async (req, res) => {
 //   res.json(result);
 // };
 
+const updateTaskInBoard = async (req, res) => {
+  const { id, taskId } = req.params;
+  const { taskTitle, description, deadline, priority } = req.body;
+
+  const updateObj = {
+    "tasks.$[task]": {
+      taskTitle,
+      description,
+      deadline,
+      priority,
+      boardId: id, // Сохраняем boardId
+    },
+  };
+
+  const result = await Board.findByIdAndUpdate(
+    id,
+    {
+      $set: updateObj,
+    },
+    {
+      new: true,
+      arrayFilters: [{ "task._id": taskId }],
+    }
+  );
+
+  if (!result) {
+    throw HttpError(404, `Board with id=${id} not found`);
+  }
+
+  res.json(result);
+};
 // const deleteTaskById = async (req, res) => {
 //   const { taskId } = req.params;
 //   const result = await boardService.deleteTaskFromBoard(taskId); // Передаем taskId напрямую
@@ -86,15 +133,31 @@ const deleteByIdBoard = async (req, res) => {
 //   res.json(result);
 // };
 
+const deleteTaskFromBoard = async (req, res) => {
+  const { id, taskId } = req.params;
+
+  // Находим доску по id
+  const result = await Board.findById(id);
+  if (!result) {
+    throw HttpError(404, `Board with id=${id} not found`);
+  }
+
+  // Удаляем задачу по taskId
+  result.tasks.pull({ _id: taskId });
+  await result.save();
+
+  res.json(result);
+};
+
 export default {
   getBoards: ctrlWrapper(getBoards),
   getBoardById: ctrlWrapper(getBoardById),
   createBoard: ctrlWrapper(createBoard),
   updateByIdBoard: ctrlWrapper(updateByIdBoard),
   deleteByIdBoard: ctrlWrapper(deleteByIdBoard),
-  // createNewTask: ctrlWrapper(createNewTask),
-  // updateTaskById: ctrlWrapper(updateTaskById),
-  // deleteTaskById: ctrlWrapper(deleteTaskById),
+  createNewTask: ctrlWrapper(createNewTask),
+  updateTaskInBoard: ctrlWrapper(updateTaskInBoard),
+  deleteTaskFromBoard: ctrlWrapper(deleteTaskFromBoard),
 };
 
 /* 

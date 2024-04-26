@@ -5,8 +5,10 @@ import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 import { validateBody } from "../../decorators/index.js";
 import {
   boardAddSchema,
+  boardAddTaskSchema,
   boardTitleSchema,
   boardUpdateSchema,
+  boardUpdateTaskSchema,
 } from "../../models/Board.js";
 
 const boardsRouter = express.Router();
@@ -42,20 +44,21 @@ boardsRouter.patch(
 boardsRouter.delete("/:id", isValidId, boardsController.deleteByIdBoard);
 
 // /* Tasks */
-// boardsRouter.post(
-//   "/:id/tasks",
-//   isEmptyBody,
-//   validateBody(boardAddTaskSchema),
-//   boardsController.createNewTask
-// );
+boardsRouter.post(
+  "/:id/tasks",
+  isValidId,
+  isEmptyBody,
+  validateBody(boardAddTaskSchema),
+  boardsController.createNewTask
+);
 
-// boardsRouter.put(
-//   "/:id/tasks/:taskId",
-//   isEmptyBody,
-//   validateBody(boardUpdateTaskSchema),
-//   boardsController.updateTaskById
-// );
+boardsRouter.put(
+  "/:id/tasks/:taskId",
+  isEmptyBody,
+  validateBody(boardUpdateTaskSchema),
+  boardsController.updateTaskInBoard
+);
 
-// boardsRouter.delete("/:id/tasks/:taskId", boardsController.deleteTaskById);
+boardsRouter.delete("/:id/tasks/:taskId", boardsController.deleteTaskFromBoard);
 
 export default boardsRouter;

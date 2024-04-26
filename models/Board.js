@@ -18,6 +18,7 @@ export const boardUpdateSchema = Joi.object({
 });
 
 export const boardAddTaskSchema = Joi.object({
+  boardId: Joi.string().required(),
   taskTitle: Joi.string().required(),
   description: Joi.string().required(),
   deadline: Joi.date().required(),
@@ -27,6 +28,7 @@ export const boardAddTaskSchema = Joi.object({
 });
 
 export const boardUpdateTaskSchema = Joi.object({
+  boardId: Joi.string(),
   taskTitle: Joi.string(),
   description: Joi.string(),
   deadline: Joi.date(),
