@@ -55,12 +55,10 @@ const deleteByIdBoard = async (req, res) => {
 };
 
 /* Tasks */
-
 // const createNewTask = async (req, res) => {
 //   const result = await boardService.addTaskToBoard(req.body);
 //   res.status(201).json(result);
 // };
-
 const createNewTask = async (req, res) => {
   const { id } = req.params;
   const { taskTitle, description, deadline, priority, boardId } = req.body;
@@ -87,7 +85,6 @@ const createNewTask = async (req, res) => {
 //   }
 //   res.json(result);
 // };
-
 const updateTaskInBoard = async (req, res) => {
   const { id, taskId } = req.params;
   const { taskTitle, description, deadline, priority } = req.body;
