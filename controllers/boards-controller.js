@@ -73,8 +73,9 @@ const createNewTask = async (req, res) => {
   result.tasks.push({ taskTitle, description, deadline, priority });
   await result.save();
 
-  res.status(201).json(result);
   console.log(result);
+  console.log(result._id);
+  res.status(201).json(result);
 };
 
 // const updateTaskById = async (req, res) => {
