@@ -59,6 +59,7 @@ const deleteByIdBoard = async (req, res) => {
 //   const result = await boardService.addTaskToBoard(req.body);
 //   res.status(201).json(result);
 // };
+
 const createNewTask = async (req, res) => {
   console.log(req.body);
   const { id } = req.params;
@@ -73,6 +74,7 @@ const createNewTask = async (req, res) => {
   await result.save();
 
   res.status(201).json(result);
+  console.log(result);
 };
 
 // const updateTaskById = async (req, res) => {
