@@ -60,15 +60,16 @@ const deleteByIdBoard = async (req, res) => {
 //   res.status(201).json(result);
 // };
 const createNewTask = async (req, res) => {
+  console.log(req.body);
   const { id } = req.params;
-  const { taskTitle, description, deadline, priority, boardId } = req.body;
+  const { taskTitle, description, deadline, priority } = req.body;
 
   const result = await Board.findById(id);
   if (!result) {
     throw HttpError(404, `Board with id=${id} not found`);
   }
 
-  result.tasks.push({ taskTitle, description, deadline, priority, boardId });
+  result.tasks.push({ taskTitle, description, deadline, priority });
   await result.save();
 
   res.status(201).json(result);

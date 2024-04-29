@@ -18,17 +18,13 @@ export const boardUpdateSchema = Joi.object({
 });
 
 export const boardAddTaskSchema = Joi.object({
-  boardId: Joi.string().required(),
-  taskTitle: Joi.string().required(),
-  description: Joi.string().required(),
-  deadline: Joi.date().required(),
-  priority: Joi.string()
-    .valid(...priorityList)
-    .required(),
+  taskTitle: Joi.string(),
+  description: Joi.string(),
+  deadline: Joi.string(),
+  priority: Joi.string().valid(...priorityList),
 });
 
 export const boardUpdateTaskSchema = Joi.object({
-  boardId: Joi.string(),
   taskTitle: Joi.string(),
   description: Joi.string(),
   deadline: Joi.date(),
@@ -41,9 +37,6 @@ export const boardTitleSchema = Joi.object({
 
 /* Mongoose schema */
 const taskSchema = new Schema({
-  boardId: {
-    type: String,
-  },
   taskTitle: {
     type: String,
     required: true,
@@ -53,7 +46,7 @@ const taskSchema = new Schema({
     required: true,
   },
   deadline: {
-    type: Date,
+    type: String,
     required: true,
   },
   priority: {
