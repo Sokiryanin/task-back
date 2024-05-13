@@ -120,6 +120,8 @@ const updateTaskInBoard = async (req, res) => {
 
   res.json(result);
 };
+
+
 // const deleteTaskById = async (req, res) => {
 //   const { taskId } = req.params;
 //   const result = await boardService.deleteTaskFromBoard(taskId); // Передаем taskId напрямую
@@ -150,6 +152,29 @@ const deleteTaskFromBoard = async (req, res) => {
   res.json(result);
 };
 
+const getTaskById = async (req, res) => {
+  try {
+    const { id, taskId } = req.params;
+    const board = await Board.findById(id);
+    if (!board) {
+      throw HttpError(404, `Board with id=${id} not found`);
+    }
+    const task = board.tasks.find((task) => task._id.toString() === taskId);
+    if (!task) {
+      throw HttpError(
+        404,
+        `Task with id=${taskId} not found in board with id=${id}`
+      );
+    }
+    res.status(200).json(task);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(error.status || 500)
+      .json({ message: error.message || "Internal server error" });
+  }
+};
+
 export default {
   getBoards: ctrlWrapper(getBoards),
   getBoardById: ctrlWrapper(getBoardById),
@@ -159,6 +184,7 @@ export default {
   createNewTask: ctrlWrapper(createNewTask),
   updateTaskInBoard: ctrlWrapper(updateTaskInBoard),
   deleteTaskFromBoard: ctrlWrapper(deleteTaskFromBoard),
+  getTaskById: ctrlWrapper(getTaskById),
 };
 
 /* 

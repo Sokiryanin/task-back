@@ -61,4 +61,6 @@ boardsRouter.put(
 
 boardsRouter.delete("/:id/tasks/:taskId", boardsController.deleteTaskFromBoard);
 
+boardsRouter.get("/:id/tasks/:taskId", boardsController.getTaskById);
+
 export default boardsRouter;
